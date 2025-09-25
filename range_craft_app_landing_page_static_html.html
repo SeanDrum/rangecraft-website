@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RangeCraft - Poker Training App</title>
+  <meta name="description" content="RangeCraft is a fun, mobile-first poker training app focused on position-based range thinking, streaks, and bite-size drills." />
+  <meta property="og:title" content="RangeCraft �� Poker Training App" />
+  <meta property="og:description" content="Learn poker the fun way. Master positions, build streaks, and level up with bite-size drills." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="assets/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="theme-color" content="#1A1A1A" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cabin:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Palette from style guide */
+      --bg-1: #1A1A1A;
+      --bg-2: #2A2A2A;
+      --card: #1E1E1E;
+      --text: #FFFFFF;
+      --text-2: #CCCCCC;
+      --text-muted: #AAAAAA;
+      --gold: #FFD700;
+      --gold-dark: #FFA000;
+      --success: #4CAF50;
+      --green-1: #2a5a2a;
+      --green-2: #1a3a1a;
+      --black: #000000;
+      --shadow: rgba(0,0,0,0.35);
+      --radius-sm: 8px;
+      --radius-md: 16px;
+      --radius-lg: 20px;
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space: 12px;
+      --space-md: 16px;
+      --space-lg: 20px;
+      --space-xl: 24px;
+      --space-2xl: 32px;
+    }
+
+    /* Reset & base */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: 'Cabin', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--text);
+      background: radial-gradient(1200px 800px at 20% -10%, var(--green-1), transparent),
+                  radial-gradient(1200px 800px at 80% 110%, var(--green-2), transparent),
+                  linear-gradient(180deg, #0b150b, var(--black));
+      background-attachment: fixed;
+      line-height: 1.5;
+    }
+
+    .container {
+      width: min(1120px, 94vw);
+      margin: 0 auto;
+      padding: var(--space-2xl) var(--space);
+    }
+
+    .container.nav {
+      padding: var(--space-xs) var(--space);
+      min-height: auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(6px);
+      background: linear-gradient(180deg, rgba(0,0,0,0.65), rgba(0,0,0,0));
+      z-index: 10;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      min-height: 260px;
+      height: 260px;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-xl);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      font-size: 20px;
+    }
+    .brand-logo {
+      width: 240px;
+      height: 240px;
+      object-fit: contain;
+      border-radius: 6px;
+    }
+
+    .nav a { color: var(--text-2); text-decoration: none; font-weight: 500; }
+    .nav a:hover { color: var(--text); }
+
+    /* Hero */
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: var(--space-2xl);
+      align-items: center;
+      padding: min(8vh, 72px) 0;
+    }
+    @media (max-width: 900px) { .hero { grid-template-columns: 1fr; } }
+
+    .app-title {
+      margin-bottom: var(--space-xl);
+    }
+
+    .app-name {
+      font-size: clamp(36px, 5vw, 64px);
+      font-weight: 700;
+      margin: 0 0 var(--space-xs);
+      text-shadow: 0 10px 24px rgba(0,0,0,0.45);
+      text-align: center;
+    }
+
+    .app-tagline {
+      font-size: 18px;
+      color: var(--text-2);
+      margin: 0 0 var(--space-lg);
+      font-weight: 500;
+    }
+
+    .hero-content {
+      border-top: 2px solid rgba(255, 215, 0, 0.2);
+      padding-top: var(--space-lg);
+    }
+
+    .headline {
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 700;
+      line-height: 1.12;
+      margin: 0 0 var(--space-lg);
+      text-shadow: 0 10px 24px rgba(0,0,0,0.45);
+    }
+    .subhead { color: var(--text-2); font-size: 18px; margin: 0 0 var(--space-2xl); }
+
+    .cta {
+      display: flex; flex-wrap: wrap; gap: var(--space);
+      align-items: center;
+    }
+
+    .app-store-badge {
+      display: inline-block;
+      line-height: 0;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 24px rgba(0,0,0,.45);
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .app-store-badge img {
+      display: block;
+      height: 48px;
+      width: auto;
+    }
+    .app-store-badge:hover { transform: translateY(-1px); }
+    .app-store-badge:active { transform: translateY(0); }
+    .app-store-badge:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+    .btn {
+      --h: 48px;
+      display: inline-flex; align-items: center; justify-content: center;
+      height: var(--h);
+      padding: 0 20px;
+      border-radius: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      border: 0;
+      cursor: pointer;
+      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+      box-shadow: 0 10px 24px rgba(0,0,0,.45);
+      will-change: transform, filter;
+    }
+    .btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+    .btn-gold {
+      color: #1A1A2E;
+      background: linear-gradient(180deg, #FFE566, var(--gold) 35%, #FFC306 70%, var(--gold-dark));
+      box-shadow: 0 8px 18px rgba(255, 215, 0, 0.28), inset 0 1px 0 rgba(255,255,255,0.65);
+    }
+    .btn-gold:hover { transform: translateY(-1px); filter: brightness(1.05); }
+    .btn-gold:active { transform: translateY(0); filter: brightness(0.98); }
+
+    .btn-ghost { color: var(--text); background: transparent; border: 1px solid rgba(255,255,255,0.2); }
+    .btn-ghost:hover { border-color: rgba(255,255,255,0.35); }
+
+    .chip {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.08);
+      padding: 6px 10px; border-radius: 999px; font-weight: 600; color: var(--text-2);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    /* Card */
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.04));
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow: 0 8px 22px var(--shadow);
+      overflow: hidden;
+    }
+
+    .card-inner { padding: var(--space-2xl); }
+
+    /* Features grid */
+    .features { display: grid; gap: var(--space-2xl); grid-template-columns: repeat(4, 1fr); }
+    @media (max-width: 1100px) { .features { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .features { grid-template-columns: 1fr; } }
+
+    .feature h3 { margin: 0 0 6px; font-size: 20px; }
+    .feature p { margin: 0; color: var(--text-2); }
+
+    /* Screenshots */
+    .shots {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-2xl);
+      align-items: stretch;
+    }
+    @media (max-width: 900px) { .shots { grid-template-columns: 1fr; } }
+
+    .shot {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: #0e0e0e;
+      min-height: 360px;
+      box-shadow: 0 12px 28px var(--shadow);
+      display: grid; place-items: center;
+    }
+    .shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .shot .placeholder { color: var(--text-muted); font-size: 14px; }
+
+    /* Hero logo block */
+    .hero-logo { display:grid; place-items:center; }
+    .hero-logo img { width: min(420px, 100%); height: auto; border-radius: 20px; box-shadow: 0 16px 40px rgba(0,0,0,.5); }
+
+    /* Hide logo on mobile devices */
+    @media (max-width: 900px) {
+      .hero-logo {
+        display: none;
+      }
+    }
+
+    /* Support */
+    .support {
+      display: grid;
+      grid-template-columns: 1fr;
+      justify-items: center;
+      gap: var(--space-2xl);
+      align-items: start;
+    }
+    @media (max-width: 900px) { .support { grid-template-columns: 1fr; } }
+
+    .support .label { color: var(--text-2); font-weight: 600; letter-spacing: .3px; }
+    .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); padding: 3px 8px; border-radius: 6px; }
+
+    form.support-form { display: grid; gap: 12px; }
+    input, textarea {
+      width: 100%;
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font: inherit;
+    }
+    textarea { min-height: 120px; resize: vertical; }
+    input::placeholder, textarea::placeholder { color: var(--text-muted); }
+    input:focus, textarea:focus { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+    footer { margin-top: var(--space-2xl); padding: var(--space-2xl) 0; color: var(--text-2); border-top: 1px solid rgba(255,255,255,0.08); }
+    .footgrid { display: flex; align-items: center; justify-content: space-between; gap: var(--space); flex-wrap: wrap; }
+    .muted { color: var(--text-muted); }
+  </style>
+</head>
+<body>
+  <main id="top" class="container">
+    <!-- Hero -->
+    <section class="hero" aria-label="Hero">
+      <div>
+        <div class="app-title">
+          <h1 class="app-name"><img src="assets/rangecraft-logo.png" alt="RangeCraft" style="height: 2em; width: auto; vertical-align: middle;" /></h1>
+        </div>
+        <div class="hero-content">
+          <h2 class="headline"><span style="color:var(--gold)">Learn poker the fun way</span> - master positions, build streaks, and level up.</h2>
+          <p class="subhead">Bite-size drills (2-4 minutes), position-based range training, and a reward loop that keeps you coming back. Built for iOS.</p>
+        <div class="cta">
+          <a id="app-store" class="app-store-badge" href="#" rel="nofollow noopener" aria-label="Download on the App Store">
+            <img src="assets/Download_on_the_App_Store_Badge_US-UK_RGB_wht_092917.svg" alt="Download on the App Store" />
+          </a>
+          <a class="btn btn-ghost" href="#support">Contact Support</a>
+        </div>
+        </div>
+      </div>
+      <div class="hero-logo" aria-label="RangeCraft logo">
+        <!-- Replace with your actual path once deployed -->
+        <img src="assets/adaptive-icon.png" alt="RangeCraft logo" />
+      </div>
+            </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" aria-label="Features" style="margin-top: 28px;">
+      <div class="features">
+        <article class="card feature">
+          <div class="card-inner">
+            <h3>Position-based training</h3>
+            <p>Practice for all positions with visual range charts and hands-on drills.</p>
+          </div>
+        </article>
+        <article class="card feature">
+          <div class="card-inner">
+            <h3>Bite-size drills</h3>
+            <p>2-4 minute lessons that fit your day. Learn theory, then apply it.</p>
+          </div>
+        </article>
+        <article class="card feature">
+          <div class="card-inner">
+            <h3>Streaks & rewards</h3>
+            <p>Hit daily goals, keep your streak alive, unlock levels and titles.</p>
+          </div>
+        </article>
+        <article class="card feature">
+          <div class="card-inner">
+            <h3>Reference ranges</h3>
+            <p>Quick tables for RFI, facing RFI, and 3-bet spots - always at hand.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Screenshots -->
+    <section id="screenshots" aria-label="Screenshots" style="margin-top: 40px;">
+      <div class="card">
+        <div class="card-inner">
+          <div class="shots">
+            <figure class="shot">
+              <img src="assets/Screen1.png" alt="Fun drills that improve your game" onerror="this.replaceWith(placehold('Home & Streaks'))">
+            </figure>
+            <figure class="shot">
+              <img src="assets/Screen2.png" alt="Streaks and progress tracking" onerror="this.replaceWith(placehold('Drills'))">
+            </figure>
+            <figure class="shot">
+              <img src="assets/Screen3.png" alt="Master poker like a pro - home and lessons" onerror="this.replaceWith(placehold('Ranges'))">
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Support -->
+    <section id="support" class="support" aria-label="Support" style="margin-top: 48px;">
+      <div class="card">
+        <div class="card-inner">
+          <h2 style="margin-top:0">Need help? Contact Support</h2>
+          <p class="muted" style="margin-top: 6px;">Reach us anytime with any support issues, questions, or comments.</p>
+          <div style="margin-top: 14px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+            <span class="label">Email</span>
+            <a id="support-email" href="mailto:rangecraftapp@gmail.com" class="chip">rangecraftapp@gmail.com</a>
+            <button class="btn btn-ghost" type="button" onclick="copyEmail()">Copy</button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footgrid">
+      <span class="muted"><span id="year"></span> RangeCraft</span>
+      <span class="muted">Built with <3 for poker learners</span>
+    </div>
+  </footer>
+
+  <script>
+    // graceful placeholders if screenshots are missing
+    function placehold(text){
+      const span = document.createElement('span');
+      span.className = 'placeholder';
+      span.textContent = text + ' �� add assets/shot-x.jpg';
+      return span;
+    }
+    // copy support email
+    function copyEmail(){
+      const email = 'rangecraftapp@gmail.com';
+      navigator.clipboard.writeText(email).then(()=>{
+        const btns = document.querySelectorAll('button');
+        const last = btns[btns.length-1];
+        const label = last.textContent;
+        last.textContent = 'Copied!';
+        setTimeout(()=> last.textContent = label, 1400);
+      });
+    }
+    // year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // TODO: replace with real App Store URL when ready
+    // document.getElementById('app-store').href = 'https://apps.apple.com/app/your-id';
+  </script>
+</body>
+</html>
+
+
+
